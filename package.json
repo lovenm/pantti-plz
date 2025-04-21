@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "dev": "bun index.html",
+    "build": "rimraf ./out/* && bun build index.html --outdir ./out --minify"
+  },
+  "dependencies": {
+    "@zxing/library": "^0.21.3"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1"
+  }
+}

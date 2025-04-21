@@ -1,0 +1,118 @@
+:root {
+  --background: #121212;
+  --primary: #00ff0d;
+  --secondary: #213b1b;
+  --surface: #374e31;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.1rem;
+  line-height: 1.5rem;
+  color: var(--primary);
+}
+
+html,
+body,
+main {
+  height: 100%;
+  background-color: var(--background);
+}
+
+pre {
+  width: 70vw;
+  overflow-x: scroll;
+  border: 1px dashed var(--surface);
+  padding: 0.5rem;
+  margin: 1rem;
+}
+
+p,
+small {
+  text-align: center;
+}
+
+hr {
+  width: 80%;
+  color: var(--surface)
+}
+
+video {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid var(--surface);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+img.inline {
+  display: inline-block;
+}
+
+.side-panel {
+  flex: 0.1;
+}
+
+@media screen and (min-width: 1080px) {
+  .side-panel {
+    flex: 0.4;
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+}
+
+#footer {
+  color: var(--surface);
+  width: 80%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+button {
+  background-color: var(--surface);
+  color: var(--primary);
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  padding: 1rem 0rem;
+  width: 8rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media(hover: hover) {
+  button:hover {
+    background-color: var(--secondary);
+  }
+}
+
+@media(hover: none) {
+  button:active {
+    background-color: var(--secondary);
+  }
+}
+
+#status.good {
+  color: green;
+}
+
+#status.bad {
+  color: red;
+}
