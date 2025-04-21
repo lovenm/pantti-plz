@@ -1,0 +1,23 @@
+name: Bundle up the code
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out repo and set up deps
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+
+      # Run the build
+      - run: bun run build
+
+      # Upload the bundled code as an artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pantti-plz
+          path: out/**
