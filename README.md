@@ -32,7 +32,7 @@ bun install
 ### Dev server
 
 ```sh
-bun index.html
+bun dev
 ```
 
 This will start up a dev server.
