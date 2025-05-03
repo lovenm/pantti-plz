@@ -86,11 +86,19 @@ const store: IStore = createStore(renderState)
 
 // Initialize application once everything has loaded.
 window.onload = async () => {
+  // TODO: Something less hacky for ensuring camera works :feelsbadman:
+
   // Ask for camera permission from the get-go, there are some weird issues with
   // zxing where it just reports deviceId as undefined even if it should not and
   // this seems to fix it.
   try {
-    await navigator.mediaDevices.getUserMedia({ video: true })
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+
+    // Stop each track, otherwise the video stream remains open and initiating
+    // the actual scan just silently fails.
+    for (const track of stream.getTracks()) {
+      track.stop()
+    }
   } catch {
     // If checking for userMedia fails, it most likely means that the device does
     // not support it.
