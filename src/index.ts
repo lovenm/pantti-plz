@@ -8,7 +8,7 @@ import {
 import sadCatThumb from '../static/sad-cat-thumb.png'
 
 type Hints = Map<DecodeHintType, unknown>
-function initializeZxing(): BrowserMultiFormatReader {
+const initializeZxing = (): BrowserMultiFormatReader => {
   const hints: Hints = new Map()
   const formats = [BarcodeFormat.EAN_13, BarcodeFormat.EAN_8]
 
@@ -66,7 +66,7 @@ let state: IState = {
 //
 // Do mutations of the state through defined functions
 //
-function setMode(newMode: Mode) {
+const setMode = (newMode: Mode) => {
   console.log(`Set mode to ${newMode}`)
   state = {
     ...state,
@@ -75,7 +75,7 @@ function setMode(newMode: Mode) {
   renderState(state)
 }
 
-function setDevices(devices: MediaDeviceInfo[]) {
+const setDevices = (devices: MediaDeviceInfo[]) => {
   console.log(`Set devices to ${JSON.stringify(devices)}`)
   // TODO: Error?
   const device = devices[0]
@@ -90,7 +90,7 @@ function setDevices(devices: MediaDeviceInfo[]) {
   renderState(state)
 }
 
-function setSelectedDevice(deviceId: string) {
+const setSelectedDevice = (deviceId: string) => {
   console.log(`Set deviceId to ${deviceId}`)
   state = {
     ...state,
@@ -100,7 +100,7 @@ function setSelectedDevice(deviceId: string) {
   renderState(state)
 }
 
-function setResult(result: IResult) {
+const setResult = (result: IResult) => {
   console.log(`Set result to ${JSON.stringify(result)}`)
   state = {
     ...state,
@@ -162,9 +162,10 @@ const deviceSelectElement = (state: IState): IElementData => ({
   ],
 })
 
-function startScanElements(state: IState): IElementData[] {
-  return [startButtonElement, deviceSelectElement(state)]
-}
+const startScanElements = (state: IState): IElementData[] => [
+  startButtonElement,
+  deviceSelectElement(state),
+]
 
 const stopButtonElement: IElementData = {
   tag: 'button',
@@ -206,7 +207,7 @@ const badStatusElements: IElementData[] = [
   { tag: 'br' },
 ]
 
-function resultElement(state: IState) {
+const resultElement = (state: IState) => {
   const result = state.result
 
   if (!result) {
@@ -244,7 +245,7 @@ const noDevicesElement = [
 //
 type RenderData = IElementData[] | IElementData | string
 
-function createElement(data: RenderData): Array<HTMLElement | Text> {
+const createElement = (data: RenderData): Array<HTMLElement | Text> => {
   if (Array.isArray(data)) {
     return data.flatMap(createElement)
   }
@@ -282,7 +283,7 @@ function createElement(data: RenderData): Array<HTMLElement | Text> {
   return [element]
 }
 
-function render(data: RenderData) {
+const render = (data: RenderData) => {
   const gui = document.getElementById('gui')
   if (!gui) {
     console.log('We fugd!')
@@ -299,7 +300,7 @@ function render(data: RenderData) {
   }
 }
 
-function renderState(state: IState) {
+const renderState = (state: IState) => {
   const elements = (() => {
     switch (state.mode) {
       case Mode.Initial:
@@ -321,7 +322,7 @@ function renderState(state: IState) {
 /**
  * Stop scanning and query the Palpa API.
  */
-async function queryPalpa(barcode: string) {
+const queryPalpa = async (barcode: string): Promise<void> => {
   codeReader.reset()
 
   const response = await fetch(palpaUrl(barcode))
@@ -339,7 +340,7 @@ async function queryPalpa(barcode: string) {
 /**
  * Start scanning for barcodes with the camera.
  */
-function startScan(state: IState) {
+const startScan = (state: IState): void => {
   const selectedDevice = state.selectedDevice
 
   if (selectedDevice) {
@@ -368,7 +369,7 @@ function startScan(state: IState) {
 /**
  * Stop scanning for barcodes and reset the state to start another scan.
  */
-function stopScan() {
+const stopScan = (): void => {
   codeReader.reset()
   setMode(Mode.StartScan)
 }
