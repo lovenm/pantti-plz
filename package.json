@@ -3,6 +3,7 @@
     "dev": "bun index.html",
     "build": "rimraf ./out/* && bun build index.html --outdir ./out --minify",
     "format": "biome format --write .",
+    "fix": "biome check --write .",
     "check": "biome check ."
   },
   "dependencies": {

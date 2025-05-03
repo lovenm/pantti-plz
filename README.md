@@ -44,3 +44,21 @@ bun run build
 ```
 
 This will bundle and minify the assets to `./out`.
+
+### Formatting & Linting
+
+If using VSCode automatic formatting is configured automatically through the
+devcontainer and committed [VSCode workspace settings](https://github.com/lovenm/pantti-plz/blob/master/.vscode/settings.json).
+
+The `package.json` contains a couple of helpful scripts as well:
+
+```sh
+# To automatically format the project
+bun format
+
+# To run formatting checker and linter for the project
+bun check
+
+# To automatically format and fix any autofixable linting errors
+bun fix
+```
