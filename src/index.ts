@@ -1,8 +1,20 @@
-import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
+import { BarcodeFormat, BrowserMultiFormatReader, DecodeHintType, NotFoundException } from '@zxing/library';
 
 import sadCatThumb from '../static/sad-cat-thumb.png'
 
-const codeReader = new BrowserMultiFormatReader()
+type Hints = Map<DecodeHintType, unknown>
+function initializeZxing(): BrowserMultiFormatReader {
+  const hints: Hints = new Map()
+  const formats = [BarcodeFormat.EAN_13, BarcodeFormat.EAN_8]
+
+  hints.set(DecodeHintType.POSSIBLE_FORMATS, formats)
+
+  const reader = new BrowserMultiFormatReader(hints)
+
+  return reader
+}
+
+const codeReader = initializeZxing()
 
 // Palpa API base url, reverse engineered from the mobile app. This could essentially
 // break at any time if Palpa decides this API is not kosher.
