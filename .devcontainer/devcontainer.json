@@ -8,7 +8,7 @@
   "forwardPorts": [3000],
   "customizations": {
     "vscode": {
-      "extensions": ["dbaeumer.vscode-eslint"]
+      "extensions": ["biomejs.biome"]
     }
   },
   "remoteUser": "bun",
