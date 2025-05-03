@@ -1,4 +1,9 @@
-import { BarcodeFormat, BrowserMultiFormatReader, DecodeHintType, NotFoundException } from '@zxing/library';
+import {
+  BarcodeFormat,
+  BrowserMultiFormatReader,
+  DecodeHintType,
+  NotFoundException,
+} from '@zxing/library'
 
 import sadCatThumb from '../static/sad-cat-thumb.png'
 
@@ -33,22 +38,22 @@ enum Mode {
 }
 
 interface IResponse {
-  status: number,
-  productName?: string,
-  recyclingSystem?: string,
-  deposit?: string,
+  status: number
+  productName?: string
+  recyclingSystem?: string
+  deposit?: string
 }
 
 interface IResult {
-  barcode: string,
-  response: IResponse,
+  barcode: string
+  response: IResponse
 }
 
 interface IState {
-  mode: Mode,
-  devices: MediaDeviceInfo[],
-  selectedDevice?: string,
-  result?: IResult,
+  mode: Mode
+  devices: MediaDeviceInfo[]
+  selectedDevice?: string
+  result?: IResult
 }
 
 let state: IState = {
@@ -110,10 +115,10 @@ function setResult(result: IResult) {
 // needs to be generated.
 //
 interface IElementData {
-  tag: string,
-  props?: { [key: string]: string | boolean },
-  eventListeners?: { [key: string]: EventListener },
-  children?: Array<IElementData | string>,
+  tag: string
+  props?: { [key: string]: string | boolean }
+  eventListeners?: { [key: string]: EventListener }
+  children?: Array<IElementData | string>
 }
 
 const startButtonElement: IElementData = {
@@ -125,43 +130,43 @@ const startButtonElement: IElementData = {
   eventListeners: {
     click: () => startScan(state),
   },
-  children: [
-    { tag: 'b', children: ['scan'] }
-  ],
+  children: [{ tag: 'b', children: ['scan'] }],
 }
 
 const deviceSelectElement = (state: IState): IElementData => ({
-    tag: 'div',
-    children: [
-      { tag: 'label', props: { for: 'source-select' }, children: ['Select device: '] },
-      { 
-        tag: 'select', 
-        props: { id: 'source-select' }, 
-        eventListeners: {
-          change: (e) => setSelectedDevice((e.currentTarget as HTMLSelectElement)?.value)
-        },
-        children: state.devices.map((device) => { 
-          return {
-            tag: 'option',
-            props: {
-              value: device.deviceId,
-              selected: (state.selectedDevice === device.deviceId) ? true : false,
-            },
-            children: [device.label],
-          }
-        })
-      }
-    ],
-  })
+  tag: 'div',
+  children: [
+    {
+      tag: 'label',
+      props: { for: 'source-select' },
+      children: ['Select device: '],
+    },
+    {
+      tag: 'select',
+      props: { id: 'source-select' },
+      eventListeners: {
+        change: (e) =>
+          setSelectedDevice((e.currentTarget as HTMLSelectElement)?.value),
+      },
+      children: state.devices.map((device) => {
+        return {
+          tag: 'option',
+          props: {
+            value: device.deviceId,
+            selected: state.selectedDevice === device.deviceId ? true : false,
+          },
+          children: [device.label],
+        }
+      }),
+    },
+  ],
+})
 
 function startScanElements(state: IState): IElementData[] {
-  return [
-    startButtonElement,
-    deviceSelectElement(state),
-  ]
+  return [startButtonElement, deviceSelectElement(state)]
 }
 
-const stopButtonElement: IElementData  = {
+const stopButtonElement: IElementData = {
   tag: 'button',
   props: {
     id: 'stop-button',
@@ -170,28 +175,34 @@ const stopButtonElement: IElementData  = {
   eventListeners: {
     click: () => stopScan(),
   },
-  children: [
-    { tag: 'b', children: ['stop'] }
-  ],
+  children: [{ tag: 'b', children: ['stop'] }],
 }
 
-const videoElement: IElementData  = { tag: 'video', props: { id: 'video' } }
+const videoElement: IElementData = { tag: 'video', props: { id: 'video' } }
 
-const scanningElements: IElementData[]  = [
-  videoElement,
-  stopButtonElement,
+const scanningElements: IElementData[] = [videoElement, stopButtonElement]
+
+const goodStatusElements: IElementData[] = [
+  { tag: 'p', children: ['Pantti get!'] },
 ]
-
-const goodStatusElements: IElementData[] = [{ tag: 'p', children: ['Pantti get!'] }]
 const badStatusElements: IElementData[] = [
   {
-    tag: 'p', children: [
+    tag: 'p',
+    children: [
       'No deposit',
-      { tag: 'img', props: { class: 'inline', height: "20rem", src: sadCatThumb } },
-    ]
+      {
+        tag: 'img',
+        props: { class: 'inline', height: '20rem', src: sadCatThumb },
+      },
+    ],
   },
   { tag: 'br' },
-  { tag: 'p', children: ['Check if the barcode was correct and scan again if it was not.'] },
+  {
+    tag: 'p',
+    children: [
+      'Check if the barcode was correct and scan again if it was not.',
+    ],
+  },
   { tag: 'br' },
 ]
 
@@ -208,11 +219,11 @@ function resultElement(state: IState) {
   // Example responses from the Palpa API:
   // - no deposit: {"status":1,"productName":null,"recyclingSystem":null,"deposit":null}
   // - yes deposit: {"status":2,"productName":"Malmgård East Coast Lager 44cl","recyclingSystem":"Tölkki","deposit":"0,15 €"}
-  const statusElements = status === 2 ? goodStatusElements : badStatusElements;
+  const statusElements = status === 2 ? goodStatusElements : badStatusElements
 
   return [
     { tag: 'p', children: [`Barcode: ${barcode}`] },
-    { tag: 'pre', children: [JSON.stringify(response, null, " ")] },
+    { tag: 'pre', children: [JSON.stringify(response, null, ' ')] },
     ...statusElements,
     startButtonElement,
   ]
@@ -221,7 +232,10 @@ function resultElement(state: IState) {
 const noDevicesElement = [
   { tag: 'p', children: ['Could not initialize video devices :('] },
   { tag: 'br' },
-  { tag: 'p', children: ['Try again with a device that actually has a camera.'] },
+  {
+    tag: 'p',
+    children: ['Try again with a device that actually has a camera.'],
+  },
 ]
 
 //
@@ -245,8 +259,8 @@ function createElement(data: RenderData): Array<HTMLElement | Text> {
       if (typeof value === 'string') {
         element.setAttribute(key, value)
       } else if (typeof value === 'boolean' && value) {
-        element.setAttribute(key, "")
-      }    
+        element.setAttribute(key, '')
+      }
     }
   }
 
@@ -269,7 +283,7 @@ function createElement(data: RenderData): Array<HTMLElement | Text> {
 function render(data: RenderData) {
   const gui = document.getElementById('gui')
   if (!gui) {
-    console.log("We fugd!")
+    console.log('We fugd!')
     return
   }
 
@@ -286,11 +300,16 @@ function render(data: RenderData) {
 function renderState(state: IState) {
   const elements = (function () {
     switch (state.mode) {
-      case Mode.Initial: return []
-      case Mode.NoVideoDevices: return noDevicesElement
-      case Mode.StartScan: return startScanElements(state)
-      case Mode.Scanning: return scanningElements
-      case Mode.Result: return resultElement(state)
+      case Mode.Initial:
+        return []
+      case Mode.NoVideoDevices:
+        return noDevicesElement
+      case Mode.StartScan:
+        return startScanElements(state)
+      case Mode.Scanning:
+        return scanningElements
+      case Mode.Result:
+        return resultElement(state)
     }
   })()
 
@@ -320,23 +339,27 @@ async function queryPalpa(barcode: string) {
  */
 function startScan(state: IState) {
   const selectedDevice = state.selectedDevice
-  
+
   if (selectedDevice) {
     setMode(Mode.Scanning)
 
-    codeReader.decodeFromVideoDevice(selectedDevice, 'video', (result, err) => {
-      if (result) {
-        queryPalpa(result.getText())
-      }
-      if (err && !(err instanceof NotFoundException)) {
-        console.error(err)
+    codeReader
+      .decodeFromVideoDevice(selectedDevice, 'video', (result, err) => {
+        if (result) {
+          queryPalpa(result.getText())
+        }
+        if (err && !(err instanceof NotFoundException)) {
+          console.error(err)
+          stopScan()
+        }
+      })
+      .catch(() => {
         stopScan()
-      }
-    }).catch(() => {
-      stopScan()
-    })
+      })
 
-    console.log(`Started continous decode from camera with id ${selectedDevice}`)
+    console.log(
+      `Started continous decode from camera with id ${selectedDevice}`,
+    )
   }
 }
 

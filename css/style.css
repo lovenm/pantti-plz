@@ -6,7 +6,7 @@
 }
 
 html {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 16px;
   letter-spacing: 0.1rem;
   line-height: 1.5rem;
@@ -35,7 +35,7 @@ small {
 
 hr {
   width: 80%;
-  color: var(--surface)
+  color: var(--surface);
 }
 
 video {
@@ -97,13 +97,13 @@ button {
   white-space: nowrap;
 }
 
-@media(hover: hover) {
+@media (hover: hover) {
   button:hover {
     background-color: var(--secondary);
   }
 }
 
-@media(hover: none) {
+@media (hover: none) {
   button:active {
     background-color: var(--secondary);
   }

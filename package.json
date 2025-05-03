@@ -1,12 +1,14 @@
 {
   "scripts": {
     "dev": "bun index.html",
-    "build": "rimraf ./out/* && bun build index.html --outdir ./out --minify"
+    "build": "rimraf ./out/* && bun build index.html --outdir ./out --minify",
+    "format": "biome format --write ."
   },
   "dependencies": {
     "@zxing/library": "^0.21.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "rimraf": "^6.0.1"
   }
 }
