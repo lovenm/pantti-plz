@@ -30,11 +30,11 @@ const palpaUrl = (ean: string): string => palpaBaseUrl + ean
 // Model a basic state machine for the different states of the app
 //
 enum Mode {
-  Initial,
-  NoVideoDevices,
-  StartScan,
-  Scanning,
-  Result,
+  Initial = 'Initial',
+  NoVideoDevices = 'NoVideoDevices',
+  StartScan = 'StartScan',
+  Scanning = 'Scanning',
+  ScanComplete = 'ScanComplete',
 }
 
 interface IResponse {
@@ -105,7 +105,7 @@ function setResult(result: IResult) {
   state = {
     ...state,
     result: result,
-    mode: Mode.Result,
+    mode: Mode.ScanComplete,
   }
   renderState(state)
 }
@@ -153,7 +153,7 @@ const deviceSelectElement = (state: IState): IElementData => ({
           tag: 'option',
           props: {
             value: device.deviceId,
-            selected: state.selectedDevice === device.deviceId ? true : false,
+            selected: state.selectedDevice === device.deviceId,
           },
           children: [device.label],
         }
@@ -246,8 +246,10 @@ type RenderData = IElementData[] | IElementData | string
 
 function createElement(data: RenderData): Array<HTMLElement | Text> {
   if (Array.isArray(data)) {
-    return data.map(createElement).flat()
-  } else if (typeof data === 'string') {
+    return data.flatMap(createElement)
+  }
+
+  if (typeof data === 'string') {
     return [document.createTextNode(data)]
   }
 
@@ -271,7 +273,7 @@ function createElement(data: RenderData): Array<HTMLElement | Text> {
   }
 
   if (children) {
-    const childElements = children.map(createElement).flat()
+    const childElements = children.flatMap(createElement)
     for (const child of childElements) {
       element.appendChild(child)
     }
@@ -298,7 +300,7 @@ function render(data: RenderData) {
 }
 
 function renderState(state: IState) {
-  const elements = (function () {
+  const elements = (() => {
     switch (state.mode) {
       case Mode.Initial:
         return []
@@ -308,7 +310,7 @@ function renderState(state: IState) {
         return startScanElements(state)
       case Mode.Scanning:
         return scanningElements
-      case Mode.Result:
+      case Mode.ScanComplete:
         return resultElement(state)
     }
   })()
@@ -385,7 +387,7 @@ window.onload = async () => {
   }
 
   const devices = await codeReader.listVideoInputDevices()
-  if (devices.length == 0) {
+  if (devices.length === 0) {
     setMode(Mode.NoVideoDevices)
   } else {
     setDevices(devices)

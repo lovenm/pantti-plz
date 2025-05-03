@@ -2,7 +2,8 @@
   "scripts": {
     "dev": "bun index.html",
     "build": "rimraf ./out/* && bun build index.html --outdir ./out --minify",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "check": "biome check ."
   },
   "dependencies": {
     "@zxing/library": "^0.21.3"
